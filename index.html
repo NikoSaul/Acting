@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Les Clés du Jeu</title>
+<title>Et Action !</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
 
@@ -16,10 +16,13 @@
     --gold: #c9a84c;
     --gold-light: #e8d5a0;
     --red: #a63d2f;
-    --blue: #2c4a6e;
     --green: #3a6b4a;
-    --purple: #5c3d7a;
-    --orange: #c46b1a;
+    /* couleur acteur 1 */
+    --a1: #5c3d7a;
+    --a1-text: #e8dcf0;
+    /* couleur acteur 2 */
+    --a2: #2c4a6e;
+    --a2-text: #d0dcee;
   }
 
   body {
@@ -30,7 +33,6 @@
     overflow-x: hidden;
   }
 
-  /* GRAIN */
   body::before {
     content: '';
     position: fixed;
@@ -43,11 +45,9 @@
 
   .app { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
 
-  /* HEADER */
   header {
     text-align: center;
     margin-bottom: 48px;
-    position: relative;
   }
 
   header h1 {
@@ -67,7 +67,6 @@
     margin-bottom: 32px;
   }
 
-  /* TIMER CONFIG */
   .timer-config {
     display: flex;
     align-items: center;
@@ -98,7 +97,6 @@
 
   .timer-config input:focus { border-color: var(--gold); }
 
-  /* BTN DEAL */
   .btn-deal {
     display: block;
     margin: 0 auto;
@@ -119,7 +117,6 @@
   .btn-deal:hover { background: var(--gold-light); transform: translateY(-1px); }
   .btn-deal:active { transform: translateY(0); }
 
-  /* CARDS GRID */
   .cards-grid { display: none; }
   .cards-grid.visible { display: block; animation: fadeUp 0.5s ease both; }
 
@@ -128,19 +125,42 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ROW */
-  .row {
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  /* ACTEURS — deux colonnes */
+  .actors-row {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 20px;
   }
 
-  .row-2 { grid-template-columns: 1fr 1fr; }
-  .row-1 { grid-template-columns: 1fr; }
-  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
-
   @media (max-width: 600px) {
-    .row-2, .row-3 { grid-template-columns: 1fr; }
+    .actors-row { grid-template-columns: 1fr; }
+  }
+
+  .actor-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Trait coloré à gauche de la colonne acteur */
+  .actor-col-a1 {
+    border-left: 2px solid var(--a1);
+    padding-left: 12px;
+  }
+
+  .actor-col-a2 {
+    border-left: 2px solid var(--a2);
+    padding-left: 12px;
   }
 
   /* CARD */
@@ -169,11 +189,6 @@
     opacity: 0.9;
   }
 
-  .card-band .num {
-    font-size: 10px;
-    opacity: 0.6;
-  }
-
   .card-body {
     padding: 18px 16px 20px;
     background: #111;
@@ -194,14 +209,20 @@
     line-height: 1.5;
   }
 
-  /* COLOR VARIANTS */
-  .card-perso .card-band { background: var(--purple); color: #e8dcf0; }
+  /* Couleurs acteur 1 */
+  .card-a1 .card-band { background: var(--a1); color: var(--a1-text); }
+
+  /* Couleurs acteur 2 */
+  .card-a2 .card-band { background: var(--a2); color: var(--a2-text); }
+
+  /* Situation */
   .card-situ .card-band { background: var(--green); color: #d8eedd; }
-  .card-obj .card-band { background: var(--orange); color: #fbe5c8; }
+
+  /* Événement */
   .card-event .card-band { background: #222; color: #888; }
   .card-event.revealed .card-band { background: var(--red); color: #f5d0cc; }
 
-  /* SECRET CARD */
+  /* SECRET */
   .card-secret .card-body {
     display: flex;
     align-items: center;
@@ -232,7 +253,7 @@
     background: #111;
   }
 
-  /* EVENT LOCKED */
+  /* EVENT */
   .card-event .card-body {
     display: flex;
     align-items: center;
@@ -241,9 +262,7 @@
     background: #0a0a0a;
   }
 
-  .card-event .lock-content {
-    text-align: center;
-  }
+  .card-event .lock-content { text-align: center; }
 
   .card-event .lock-content .countdown {
     font-size: 28px;
@@ -266,11 +285,21 @@
     background: #120a0a;
   }
 
-  .card-event.revealed .card-body .card-title {
-    color: #f5d0cc;
+  .card-event.revealed .card-body .card-title { color: #f5d0cc; }
+
+  /* ROWS */
+  .row { display: grid; gap: 16px; margin-bottom: 20px; }
+  .row-1 { grid-template-columns: 1fr; }
+
+  @keyframes revealFlash {
+    0% { opacity: 0; transform: scale(0.97); }
+    60% { opacity: 1; transform: scale(1.01); }
+    100% { opacity: 1; transform: scale(1); }
   }
 
-  /* TIMER BAR */
+  .card-event.revealed { animation: revealFlash 0.4s ease both; }
+
+  /* TIMER */
   .timer-section {
     margin: 24px 0 16px;
     position: relative;
@@ -300,10 +329,7 @@
     align-items: center;
   }
 
-  .timer-display {
-    font-size: 13px;
-    color: #777;
-  }
+  .timer-display { font-size: 13px; color: #777; }
 
   .timer-display span {
     color: var(--gold);
@@ -328,32 +354,8 @@
   }
 
   .btn-start:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-start.running { border-color: var(--red); color: var(--red); }
 
-  .btn-start.running {
-    border-color: var(--red);
-    color: var(--red);
-  }
-
-  /* SECTION LABEL */
-  .section-label {
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: #333;
-    margin-bottom: 10px;
-    padding-left: 2px;
-  }
-
-  /* REVEALED FLASH */
-  @keyframes revealFlash {
-    0% { opacity: 0; transform: scale(0.97); }
-    60% { opacity: 1; transform: scale(1.01); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-
-  .card-event.revealed { animation: revealFlash 0.4s ease both; }
-
-  /* REDEAL */
   .bottom-bar {
     margin-top: 32px;
     text-align: center;
@@ -389,8 +391,20 @@
     font-family: inherit;
     line-height: 1;
   }
+
   .btn-reroll:hover { color: rgba(255,255,255,0.7); }
   .band-right { display: flex; align-items: center; gap: 6px; }
+
+  /* Label acteur au-dessus de la colonne */
+  .actor-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+  }
+
+  .actor-label-a1 { color: var(--a1); }
+  .actor-label-a2 { color: var(--a2); }
 </style>
 </head>
 <body>
@@ -408,11 +422,15 @@
 
   <div class="cards-grid" id="grid">
 
-    <div class="section-label">Personnages</div>
-    <div class="row row-2" id="persoRow"></div>
-
-    <div class="section-label">Objectifs secrets — cliquez pour révéler</div>
-    <div class="row row-2" id="objRow"></div>
+    <div class="section-label">Acteurs — personnage &amp; objectif secret</div>
+    <div class="actors-row">
+      <div class="actor-col actor-col-a1" id="actor1Col">
+        <div class="actor-label actor-label-a1">Acteur 1</div>
+      </div>
+      <div class="actor-col actor-col-a2" id="actor2Col">
+        <div class="actor-label actor-label-a2">Acteur 2</div>
+      </div>
+    </div>
 
     <div class="section-label">Situation</div>
     <div class="row row-1" id="situRow"></div>
@@ -527,13 +545,15 @@ function pick(arr, exclude=[]) {
 
 const state = { p1i:-1, p2i:-1, o1i:-1, o2i:-1, situi:-1, evi:-1 };
 
-function makeCard(type, data, idx, secret=false, slot='') {
+// actor = 'a1' | 'a2' | null
+function makeCard(type, data, idx, secret=false, slot='', actor=null) {
   const typeLabels = { perso:'Personnage', situ:'Situation', obj:'Objectif secret', event:'Événement' };
+  const colorClass = actor ? `card-${actor}` : `card-${type}`;
   const reroll = `<button class="btn-reroll" onclick="reroll('${slot}',event)" title="Nouvelle carte">↺</button>`;
 
   if (secret) {
     return `
-      <div class="card card-${type} card-secret" id="card-${slot}" data-slot="${slot}" data-idx="${idx}">
+      <div class="card ${colorClass} card-secret" id="card-${slot}" data-slot="${slot}" data-idx="${idx}">
         <div class="card-band">
           <span class="type">${typeLabels[type]}</span>
           <div class="band-right">${reroll}</div>
@@ -547,7 +567,7 @@ function makeCard(type, data, idx, secret=false, slot='') {
   }
 
   return `
-    <div class="card card-${type}" id="card-${slot}" data-slot="${slot}" data-idx="${idx}">
+    <div class="card ${colorClass}" id="card-${slot}" data-slot="${slot}" data-idx="${idx}">
       <div class="card-band">
         <span class="type">${typeLabels[type]}</span>
         <div class="band-right">${reroll}</div>
@@ -582,9 +602,9 @@ function makeEventCard(data, idx) {
 function reroll(slot, e) {
   e.stopPropagation();
   const sourceMap = { p1:'personnages', p2:'personnages', o1:'objectifs', o2:'objectifs', situ:'situations', ev:'evenements' };
+  const actorMap = { p1:'a1', p2:'a2', o1:'a1', o2:'a2', situ:null, ev:null };
   const src = DATA[sourceMap[slot]];
 
-  // exclude sibling card of same type
   const excludes = [];
   if (slot === 'p1') excludes.push(state.p2i);
   if (slot === 'p2') excludes.push(state.p1i);
@@ -594,25 +614,20 @@ function reroll(slot, e) {
   const [newData, newIdx] = pick(src, excludes);
   state[slot+'i'] = newIdx;
 
-  const secret = slot === 'o1' || slot === 'o2';
-  const typeMap = { p1:'perso', p2:'perso', o1:'obj', o2:'obj', situ:'situ', ev:'ev' };
-
   if (slot === 'ev') {
     document.getElementById('eventRow').innerHTML = makeEventCard(newData, newIdx);
-    // restore timer display on event card
     const evCountdown = document.getElementById('eventCountdown');
-    if (evCountdown && !eventRevealed) {
-      evCountdown.textContent = formatTime(timerRemaining);
-    }
+    if (evCountdown && !eventRevealed) evCountdown.textContent = formatTime(timerRemaining);
     return;
   }
 
-  const card = document.getElementById('card-'+slot);
-  const row = card.parentElement;
-  const newHtml = makeCard(typeMap[slot], newData, newIdx, secret, slot);
-  card.outerHTML = newHtml;
+  const secret = slot === 'o1' || slot === 'o2';
+  const typeMap = { p1:'perso', p2:'perso', o1:'obj', o2:'obj', situ:'situ' };
+  const actor = actorMap[slot];
 
-  // flash
+  const card = document.getElementById('card-'+slot);
+  card.outerHTML = makeCard(typeMap[slot], newData, newIdx, secret, slot, actor);
+
   const updated = document.getElementById('card-'+slot);
   updated.style.opacity = '0';
   updated.style.transform = 'scale(0.97)';
@@ -625,8 +640,7 @@ function reroll(slot, e) {
 
 function revealSecret(id, bodyEl) {
   const card = document.getElementById(id);
-  const isOpen = card.classList.contains('open');
-  if (isOpen) {
+  if (card.classList.contains('open')) {
     card.classList.remove('open');
     bodyEl.querySelector('.hint').style.display = 'flex';
     bodyEl.querySelector('.card-title').style.display = 'none';
@@ -643,7 +657,6 @@ let timerInterval = null;
 let timerTotal = 120;
 let timerRemaining = 120;
 let eventRevealed = false;
-let eventData = null;
 
 function deal() {
   clearInterval(timerInterval);
@@ -661,19 +674,21 @@ function deal() {
   const [ev, evi] = pick(DATA.evenements);
 
   state.p1i=p1i; state.p2i=p2i; state.o1i=o1i; state.o2i=o2i; state.situi=situi; state.evi=evi;
-  eventData = ev;
 
-  document.getElementById('persoRow').innerHTML =
-    makeCard('perso', p1, p1i, true, 'p1') + makeCard('perso', p2, p2i, true, 'p2');
+  // Acteur 1 : perso + obj (couleur a1)
+  document.getElementById('actor1Col').innerHTML =
+    `<div class="actor-label actor-label-a1">Acteur 1</div>` +
+    makeCard('perso', p1, p1i, true, 'p1', 'a1') +
+    makeCard('obj',   o1, o1i, true, 'o1', 'a1');
 
-  document.getElementById('objRow').innerHTML =
-    makeCard('obj', o1, o1i, true, 'o1') + makeCard('obj', o2, o2i, true, 'o2');
+  // Acteur 2 : perso + obj (couleur a2)
+  document.getElementById('actor2Col').innerHTML =
+    `<div class="actor-label actor-label-a2">Acteur 2</div>` +
+    makeCard('perso', p2, p2i, true, 'p2', 'a2') +
+    makeCard('obj',   o2, o2i, true, 'o2', 'a2');
 
-  document.getElementById('situRow').innerHTML =
-    makeCard('situ', situ, situi, false, 'situ');
-
-  document.getElementById('eventRow').innerHTML =
-    makeEventCard(ev, evi);
+  document.getElementById('situRow').innerHTML = makeCard('situ', situ, situi, false, 'situ', null);
+  document.getElementById('eventRow').innerHTML = makeEventCard(ev, evi);
 
   document.getElementById('timerBar').style.width = '100%';
   document.getElementById('timerBar').classList.remove('danger');
@@ -701,8 +716,7 @@ function formatTime(s) {
 function playRevealSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const times = [[0, 440, 0.15], [0.18, 554, 0.15], [0.36, 659, 0.3]];
-    times.forEach(([when, freq, dur]) => {
+    [[0,440,0.15],[0.18,554,0.15],[0.36,659,0.3]].forEach(([when, freq, dur]) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
@@ -750,8 +764,6 @@ function toggleTimer() {
     bar.style.width = pct + '%';
 
     const display = document.getElementById('timerDisplay');
-    const countEl = document.getElementById('timerCount');
-
     if (pct < 20) {
       bar.classList.add('danger');
       display.classList.add('danger');
@@ -759,10 +771,9 @@ function toggleTimer() {
 
     if (timerRemaining > 0) {
       if (!eventRevealed) {
-        if (countEl) countEl.textContent = formatTime(timerRemaining);
+        display.innerHTML = `<span id="timerCount">${formatTime(timerRemaining)}</span> · événement verrouillé`;
         const evCountdown = document.getElementById('eventCountdown');
         if (evCountdown) evCountdown.textContent = formatTime(timerRemaining);
-        display.innerHTML = `<span id="timerCount">${formatTime(timerRemaining)}</span> · événement verrouillé`;
       }
     } else {
       clearInterval(timerInterval);
@@ -773,7 +784,6 @@ function toggleTimer() {
     }
   }, 1000);
 }
-
 </script>
 </body>
 </html>
