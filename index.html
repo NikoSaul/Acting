@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Et Action !</title>
+<title>Et Action</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
 
@@ -12,18 +12,17 @@
   :root {
     --ink: #1a1714;
     --paper: #f5f0e8;
-    --cream: #ede8db;
     --gold: #c9a84c;
     --gold-light: #e8d5a0;
     --red: #a63d2f;
     --green: #3a6b4a;
-    /* couleur acteur 1 */
     --a1: #5c3d7a;
     --a1-text: #e8dcf0;
-    /* couleur acteur 2 */
     --a2: #2c4a6e;
     --a2-text: #d0dcee;
   }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     background: var(--ink);
@@ -45,10 +44,7 @@
 
   .app { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
 
-  header {
-    text-align: center;
-    margin-bottom: 48px;
-  }
+  header { text-align: center; margin-bottom: 48px; }
 
   header h1 {
     font-family: 'DM Serif Display', serif;
@@ -134,7 +130,6 @@
     padding-left: 2px;
   }
 
-  /* ACTEURS — deux colonnes */
   .actors-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -146,29 +141,24 @@
     .actors-row { grid-template-columns: 1fr; }
   }
 
-  .actor-col {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .actor-col { display: flex; flex-direction: column; gap: 10px; }
+  .actor-col-a1 { border-left: 2px solid var(--a1); padding-left: 12px; }
+  .actor-col-a2 { border-left: 2px solid var(--a2); padding-left: 12px; }
+
+  .actor-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding-bottom: 4px;
   }
 
-  /* Trait coloré à gauche de la colonne acteur */
-  .actor-col-a1 {
-    border-left: 2px solid var(--a1);
-    padding-left: 12px;
-  }
+  .actor-label-a1 { color: var(--a1); }
+  .actor-label-a2 { color: var(--a2); }
 
-  .actor-col-a2 {
-    border-left: 2px solid var(--a2);
-    padding-left: 12px;
-  }
-
-  /* CARD */
   .card {
     border: 1px solid #2a2a2a;
     border-radius: 4px;
     overflow: hidden;
-    position: relative;
     transition: transform 0.2s;
   }
 
@@ -189,10 +179,9 @@
     opacity: 0.9;
   }
 
-  .card-body {
-    padding: 18px 16px 20px;
-    background: #111;
-  }
+  .band-right { display: flex; align-items: center; gap: 6px; }
+
+  .card-body { padding: 18px 16px 20px; background: #111; }
 
   .card-title {
     font-family: 'DM Serif Display', serif;
@@ -202,32 +191,20 @@
     color: var(--paper);
   }
 
-  .card-sub {
-    font-size: 11px;
-    color: #888;
-    font-style: italic;
-    line-height: 1.5;
-  }
+  .card-sub { font-size: 11px; color: #888; font-style: italic; line-height: 1.5; }
 
-  /* Couleurs acteur 1 */
   .card-a1 .card-band { background: var(--a1); color: var(--a1-text); }
-
-  /* Couleurs acteur 2 */
   .card-a2 .card-band { background: var(--a2); color: var(--a2-text); }
-
-  /* Situation */
+  .card-rel .card-band { background: #7a5c2e; color: #f0e0c0; }
   .card-situ .card-band { background: var(--green); color: #d8eedd; }
-
-  /* Événement */
   .card-event .card-band { background: #222; color: #888; }
   .card-event.revealed .card-band { background: var(--red); color: #f5d0cc; }
 
-  /* SECRET */
   .card-secret .card-body {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 90px;
+    min-height: 80px;
     cursor: pointer;
     user-select: none;
     background: #0d0d0d;
@@ -247,13 +224,8 @@
     gap: 4px;
   }
 
-  .card-secret.open .card-body {
-    display: block;
-    cursor: default;
-    background: #111;
-  }
+  .card-secret.open .card-body { display: block; cursor: default; background: #111; }
 
-  /* EVENT */
   .card-event .card-body {
     display: flex;
     align-items: center;
@@ -280,14 +252,9 @@
     color: #333;
   }
 
-  .card-event.revealed .card-body {
-    display: block;
-    background: #120a0a;
-  }
-
+  .card-event.revealed .card-body { display: block; background: #120a0a; }
   .card-event.revealed .card-body .card-title { color: #f5d0cc; }
 
-  /* ROWS */
   .row { display: grid; gap: 16px; margin-bottom: 20px; }
   .row-1 { grid-template-columns: 1fr; }
 
@@ -299,11 +266,7 @@
 
   .card-event.revealed { animation: revealFlash 0.4s ease both; }
 
-  /* TIMER */
-  .timer-section {
-    margin: 24px 0 16px;
-    position: relative;
-  }
+  .timer-section { margin: 24px 0 16px; }
 
   .timer-bar-wrap {
     height: 3px;
@@ -323,11 +286,7 @@
 
   .timer-bar.danger { background: var(--red); }
 
-  .timer-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  .timer-info { display: flex; justify-content: space-between; align-items: center; }
 
   .timer-display { font-size: 13px; color: #777; }
 
@@ -393,24 +352,12 @@
   }
 
   .btn-reroll:hover { color: rgba(255,255,255,0.7); }
-  .band-right { display: flex; align-items: center; gap: 6px; }
-
-  /* Label acteur au-dessus de la colonne */
-  .actor-label {
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    padding-bottom: 6px;
-  }
-
-  .actor-label-a1 { color: var(--a1); }
-  .actor-label-a2 { color: var(--a2); }
 </style>
 </head>
 <body>
 <div class="app">
   <header>
-    <h1>Les Clés du Jeu</h1>
+    <h1>Et Action !</h1>
     <p>Jeu d'impro · direction d'acteur</p>
     <div class="timer-config">
       <label>Événement dans</label>
@@ -422,15 +369,14 @@
 
   <div class="cards-grid" id="grid">
 
-    <div class="section-label">Acteurs — personnage &amp; objectif secret</div>
+    <div class="section-label">Acteurs — personnage · objectif · contrainte</div>
     <div class="actors-row">
-      <div class="actor-col actor-col-a1" id="actor1Col">
-        <div class="actor-label actor-label-a1">Acteur 1</div>
-      </div>
-      <div class="actor-col actor-col-a2" id="actor2Col">
-        <div class="actor-label actor-label-a2">Acteur 2</div>
-      </div>
+      <div class="actor-col actor-col-a1" id="actor1Col"></div>
+      <div class="actor-col actor-col-a2" id="actor2Col"></div>
     </div>
+
+    <div class="section-label">Relation entre les acteurs</div>
+    <div class="row row-1" id="relRow"></div>
 
     <div class="section-label">Situation</div>
     <div class="row row-1" id="situRow"></div>
@@ -440,7 +386,9 @@
         <div class="timer-bar" id="timerBar"></div>
       </div>
       <div class="timer-info">
-        <div class="timer-display" id="timerDisplay"><span id="timerCount">--</span> · événement verrouillé</div>
+        <div class="timer-display" id="timerDisplay">
+          <span id="timerCount">--</span> · événement verrouillé
+        </div>
         <button class="btn-start" id="btnStart" onclick="toggleTimer()">▶ Démarrer</button>
       </div>
     </div>
@@ -518,6 +466,43 @@ const DATA = {
     ["Trouver une information précise", "Discrètement"],
     ["Changer d'avis sur cette personne", "En mieux ou en pire"],
   ],
+  relations: [
+    ["Vous vous êtes rencontrés une seule fois, il y a longtemps", "Aucun des deux n'a oublié"],
+    ["Vous avez un ami commun que vous n'avez pas mentionné", "Il sait des choses sur vous deux"],
+    ["Vous avez partagé quelque chose d'important sans jamais en parler", "Ça n'a pas été dit"],
+    ["Vous ne vous connaissez pas, mais vous vous êtes déjà vus", "Sans jamais vous adresser la parole"],
+    ["Vous avez travaillé ensemble, brièvement", "Ça ne s'est pas bien terminé"],
+    ["Vous vous êtes disputés une fois, sérieusement", "Aucun des deux n'a vraiment tourné la page"],
+    ["Vous avez en commun une perte que vous n'avez pas nommée", "Chacun la porte à sa façon"],
+    ["Quelqu'un vous a mis en contact sans vous prévenir", "Vous ne savez pas encore pourquoi"],
+    ["Vous partagez un secret que vous n'êtes pas censés connaître tous les deux", "Ni l'un ni l'autre ne sait que l'autre sait"],
+    ["Vous vous étiez perdus de vue volontairement", "Se retrouver ici n'était pas prévu"],
+    ["L'un de vous a rendu un service à l'autre, il y a longtemps", "Sans attendre de retour"],
+    ["Vous avez failli vous rencontrer plusieurs fois avant aujourd'hui", "Quelque chose avait toujours empêché"],
+    ["Vous avez un passé commun que l'un des deux préférerait oublier", "L'autre s'en souvient très bien"],
+    ["Vous ne vous connaissez pas vraiment, mais vous savez des choses l'un sur l'autre", "Via des tiers"],
+  ],
+  // Contraintes individuelles
+  contraintes: [
+    "Tu ne peux pas poser de questions directes",
+    "Tu ne peux pas t'asseoir ni t'appuyer sur quoi que ce soit",
+    "Chaque réplique doit être plus courte que la précédente",
+    "Tu ne peux jamais regarder l'autre dans les yeux plus de deux secondes",
+    "Tu dois tenir un objet en main en permanence",
+    "Tu ne peux pas dire « non » ni « jamais »",
+    "Tu parles toujours un peu trop vite, comme si tu manquais de temps",
+    "Tu ne peux pas prononcer le prénom de l'autre",
+    "Tu réponds systématiquement à côté avant de revenir au sujet",
+    "Tu dois rester debout et en mouvement constant",
+    "Tu n'achèves jamais complètement une phrase — tu t'arrêtes juste avant",
+    "Tu prends toujours trois secondes avant de répondre",
+    "Tu dois mentionner quelque chose de concret dans chaque réplique",
+    "Tu ne peux exprimer une émotion que par une action — jamais avec des mots",
+    "Tu évites tout contact physique, même accidentel",
+    "Tu parles toujours un peu moins fort que tu ne le ferais naturellement",
+    "Tu dois garder les bras croisés ou les mains dans les poches en permanence",
+    "Tu ne peux pas commencer une réplique avant que l'autre ait fini la sienne",
+  ],
   evenements: [
     ["Un téléphone sonne — l'un des deux doit sortir", "Il revient dans 30 secondes"],
     ["La lumière s'éteint", "Ou baisse brutalement"],
@@ -543,38 +528,42 @@ function pick(arr, exclude=[]) {
   return [available[idx], arr.indexOf(available[idx])];
 }
 
-const state = { p1i:-1, p2i:-1, o1i:-1, o2i:-1, situi:-1, evi:-1 };
+const state = { p1i:-1, p2i:-1, o1i:-1, o2i:-1, ri:-1, c1i:-1, c2i:-1, situi:-1, evi:-1 };
 
-// actor = 'a1' | 'a2' | null
-function makeCard(type, data, idx, secret=false, slot='', actor=null) {
-  const typeLabels = { perso:'Personnage', situ:'Situation', obj:'Objectif secret', event:'Événement' };
+function makeCard(type, title, sub, idx, secret, slot, actor) {
+  const typeLabels = {
+    perso:'Personnage', obj:'Objectif secret',
+    relation:'Relation', contrainte:'Contrainte',
+    situ:'Situation', event:'Événement'
+  };
   const colorClass = actor ? `card-${actor}` : `card-${type}`;
   const reroll = `<button class="btn-reroll" onclick="reroll('${slot}',event)" title="Nouvelle carte">↺</button>`;
+  const label = typeLabels[type] || type;
 
   if (secret) {
     return `
-      <div class="card ${colorClass} card-secret" id="card-${slot}" data-slot="${slot}" data-idx="${idx}">
+      <div class="card ${colorClass} card-secret" id="card-${slot}">
         <div class="card-band">
-          <span class="type">${typeLabels[type]}</span>
+          <span class="type">${label}</span>
           <div class="band-right">${reroll}</div>
         </div>
         <div class="card-body" onclick="revealSecret('card-${slot}', this)">
           <div class="hint">Appuyer pour révéler<br>à l'acteur concerné</div>
-          <div class="card-title" style="display:none">${data[0]}</div>
-          <div class="card-sub" style="display:none">${data[1]}</div>
+          <div class="card-title" style="display:none">${title}</div>
+          ${sub ? `<div class="card-sub" style="display:none">${sub}</div>` : ''}
         </div>
       </div>`;
   }
 
   return `
-    <div class="card ${colorClass}" id="card-${slot}" data-slot="${slot}" data-idx="${idx}">
+    <div class="card ${colorClass}" id="card-${slot}">
       <div class="card-band">
-        <span class="type">${typeLabels[type]}</span>
+        <span class="type">${label}</span>
         <div class="band-right">${reroll}</div>
       </div>
       <div class="card-body">
-        <div class="card-title">${data[0]}</div>
-        <div class="card-sub">${data[1]}</div>
+        <div class="card-title">${title}</div>
+        ${sub ? `<div class="card-sub">${sub}</div>` : ''}
       </div>
     </div>`;
 }
@@ -582,7 +571,7 @@ function makeCard(type, data, idx, secret=false, slot='', actor=null) {
 function makeEventCard(data, idx) {
   const reroll = `<button class="btn-reroll" onclick="reroll('ev',event)" title="Nouvelle carte">↺</button>`;
   return `
-    <div class="card card-event" id="eventCard" data-slot="ev" data-idx="${idx}">
+    <div class="card card-event" id="eventCard">
       <div class="card-band">
         <span class="type">Événement</span>
         <div class="band-right">${reroll}</div>
@@ -591,7 +580,7 @@ function makeEventCard(data, idx) {
         <div class="lock-content">
           <span class="countdown" id="eventCountdown">--</span>
           <span class="lock-label">Se révèle au démarrage du timer</span>
-          <button class="btn-reveal-early" onclick="revealEvent()" style="margin-top:10px;background:transparent;border:1px solid #2a2a2a;color:#333;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 14px;cursor:pointer;border-radius:2px;transition:all .2s" onmouseover="this.style.borderColor='#555';this.style.color='#777'" onmouseout="this.style.borderColor='#2a2a2a';this.style.color='#333'">Révéler maintenant</button>
+          <button onclick="revealEvent()" style="margin-top:10px;background:transparent;border:1px solid #2a2a2a;color:#333;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 14px;cursor:pointer;border-radius:2px;transition:all .2s" onmouseover="this.style.borderColor='#555';this.style.color='#777'" onmouseout="this.style.borderColor='#2a2a2a';this.style.color='#333'">Révéler maintenant</button>
         </div>
         <div class="card-title" style="display:none" id="eventTitle">${data[0]}</div>
         <div class="card-sub" style="display:none" id="eventSub">${data[1]}</div>
@@ -599,36 +588,74 @@ function makeEventCard(data, idx) {
     </div>`;
 }
 
+function renderActorCol(actorNum) {
+  const a = `a${actorNum}`;
+  const si = actorNum === 1;
+  const pi = si ? state.p1i : state.p2i;
+  const oi = si ? state.o1i : state.o2i;
+  const ci = si ? state.c1i : state.c2i;
+
+  const p  = DATA.personnages[pi];
+  const o  = DATA.objectifs[oi];
+  const con = DATA.contraintes[ci];
+
+  const slots = si
+    ? { p:'p1', o:'o1', c:'c1' }
+    : { p:'p2', o:'o2', c:'c2' };
+
+  return `
+    <div class="actor-label actor-label-${a}">Acteur ${actorNum}</div>
+    ${makeCard('perso',     p[0],  p[1],   pi, true, slots.p, a)}
+    ${makeCard('obj',       o[0],  o[1],   oi, true, slots.o, a)}
+    ${makeCard('contrainte',con,   null,   ci, true, slots.c, a)}
+  `;
+}
+
 function reroll(slot, e) {
   e.stopPropagation();
-  const sourceMap = { p1:'personnages', p2:'personnages', o1:'objectifs', o2:'objectifs', situ:'situations', ev:'evenements' };
-  const actorMap = { p1:'a1', p2:'a2', o1:'a1', o2:'a2', situ:null, ev:null };
-  const src = DATA[sourceMap[slot]];
 
-  const excludes = [];
-  if (slot === 'p1') excludes.push(state.p2i);
-  if (slot === 'p2') excludes.push(state.p1i);
-  if (slot === 'o1') excludes.push(state.o2i);
-  if (slot === 'o2') excludes.push(state.o1i);
-
-  const [newData, newIdx] = pick(src, excludes);
-  state[slot+'i'] = newIdx;
+  if (slot === 'rel') {
+    const [newRel, newIdx] = pick(DATA.relations, [state.ri]);
+    state.ri = newIdx;
+    replaceCard('card-rel', 'relation', newRel[0], newRel[1], newIdx, false, 'rel', null);
+    return;
+  }
 
   if (slot === 'ev') {
+    const [newData, newIdx] = pick(DATA.evenements);
+    state.evi = newIdx;
     document.getElementById('eventRow').innerHTML = makeEventCard(newData, newIdx);
     const evCountdown = document.getElementById('eventCountdown');
     if (evCountdown && !eventRevealed) evCountdown.textContent = formatTime(timerRemaining);
     return;
   }
 
-  const secret = slot === 'o1' || slot === 'o2';
-  const typeMap = { p1:'perso', p2:'perso', o1:'obj', o2:'obj', situ:'situ' };
-  const actor = actorMap[slot];
+  const cfg = {
+    p1: { src:'personnages', excl:()=>[state.p2i], stateKey:'p1i', type:'perso',     actor:'a1', secret:true,  sub:true  },
+    p2: { src:'personnages', excl:()=>[state.p1i], stateKey:'p2i', type:'perso',     actor:'a2', secret:true,  sub:true  },
+    o1: { src:'objectifs',   excl:()=>[state.o2i], stateKey:'o1i', type:'obj',       actor:'a1', secret:true,  sub:true  },
+    o2: { src:'objectifs',   excl:()=>[state.o1i], stateKey:'o2i', type:'obj',       actor:'a2', secret:true,  sub:true  },
+    c1: { src:'contraintes', excl:()=>[state.c2i], stateKey:'c1i', type:'contrainte',actor:'a1', secret:true,  sub:false },
+    c2: { src:'contraintes', excl:()=>[state.c1i], stateKey:'c2i', type:'contrainte',actor:'a2', secret:true,  sub:false },
+    situ:{ src:'situations', excl:()=>[],          stateKey:'situi',type:'situ',     actor:null, secret:false, sub:true  },
+  };
 
-  const card = document.getElementById('card-'+slot);
-  card.outerHTML = makeCard(typeMap[slot], newData, newIdx, secret, slot, actor);
+  const c = cfg[slot];
+  if (!c) return;
+  const [newData, newIdx] = pick(DATA[c.src], c.excl());
+  state[c.stateKey] = newIdx;
 
-  const updated = document.getElementById('card-'+slot);
+  const title = Array.isArray(newData) ? newData[0] : newData;
+  const sub   = c.sub && Array.isArray(newData) ? newData[1] : null;
+  replaceCard('card-'+slot, c.type, title, sub, newIdx, c.secret, slot, c.actor);
+}
+
+function replaceCard(id, type, title, sub, idx, secret, slot, actor) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.outerHTML = makeCard(type, title, sub, idx, secret, slot, actor);
+  const updated = document.getElementById(id);
+  if (!updated) return;
   updated.style.opacity = '0';
   updated.style.transform = 'scale(0.97)';
   requestAnimationFrame(() => {
@@ -644,12 +671,14 @@ function revealSecret(id, bodyEl) {
     card.classList.remove('open');
     bodyEl.querySelector('.hint').style.display = 'flex';
     bodyEl.querySelector('.card-title').style.display = 'none';
-    bodyEl.querySelector('.card-sub').style.display = 'none';
+    const sub = bodyEl.querySelector('.card-sub');
+    if (sub) sub.style.display = 'none';
   } else {
     card.classList.add('open');
     bodyEl.querySelector('.hint').style.display = 'none';
     bodyEl.querySelector('.card-title').style.display = 'block';
-    bodyEl.querySelector('.card-sub').style.display = 'block';
+    const sub = bodyEl.querySelector('.card-sub');
+    if (sub) sub.style.display = 'block';
   }
 }
 
@@ -666,34 +695,29 @@ function deal() {
   timerTotal = parseInt(document.getElementById('timerInput').value) || 120;
   timerRemaining = timerTotal;
 
-  const [p1, p1i] = pick(DATA.personnages);
-  const [p2, p2i] = pick(DATA.personnages, [p1i]);
-  const [o1, o1i] = pick(DATA.objectifs);
-  const [o2, o2i] = pick(DATA.objectifs, [o1i]);
+  const [p1, p1i]   = pick(DATA.personnages);
+  const [p2, p2i]   = pick(DATA.personnages, [p1i]);
+  const [o1, o1i]   = pick(DATA.objectifs);
+  const [o2, o2i]   = pick(DATA.objectifs, [o1i]);
+  const [rel, ri]    = pick(DATA.relations);
+  const [,   c1i]   = pick(DATA.contraintes);
+  const [,   c2i]   = pick(DATA.contraintes, [c1i]);
   const [situ, situi] = pick(DATA.situations);
-  const [ev, evi] = pick(DATA.evenements);
+  const [ev, evi]   = pick(DATA.evenements);
 
-  state.p1i=p1i; state.p2i=p2i; state.o1i=o1i; state.o2i=o2i; state.situi=situi; state.evi=evi;
+  Object.assign(state, { p1i, p2i, o1i, o2i, ri, c1i, c2i, situi, evi });
 
-  // Acteur 1 : perso + obj (couleur a1)
-  document.getElementById('actor1Col').innerHTML =
-    `<div class="actor-label actor-label-a1">Acteur 1</div>` +
-    makeCard('perso', p1, p1i, true, 'p1', 'a1') +
-    makeCard('obj',   o1, o1i, true, 'o1', 'a1');
-
-  // Acteur 2 : perso + obj (couleur a2)
-  document.getElementById('actor2Col').innerHTML =
-    `<div class="actor-label actor-label-a2">Acteur 2</div>` +
-    makeCard('perso', p2, p2i, true, 'p2', 'a2') +
-    makeCard('obj',   o2, o2i, true, 'o2', 'a2');
-
-  document.getElementById('situRow').innerHTML = makeCard('situ', situ, situi, false, 'situ', null);
-  document.getElementById('eventRow').innerHTML = makeEventCard(ev, evi);
+  document.getElementById('actor1Col').innerHTML = renderActorCol(1);
+  document.getElementById('actor2Col').innerHTML = renderActorCol(2);
+  document.getElementById('relRow').innerHTML    = makeCard('relation', rel[0], rel[1], ri, false, 'rel', null);
+  document.getElementById('situRow').innerHTML   = makeCard('situ', situ[0], situ[1], situi, false, 'situ', null);
+  document.getElementById('eventRow').innerHTML  = makeEventCard(ev, evi);
 
   document.getElementById('timerBar').style.width = '100%';
   document.getElementById('timerBar').classList.remove('danger');
   document.getElementById('timerDisplay').classList.remove('danger');
-  document.getElementById('timerDisplay').innerHTML = `<span id="timerCount">${formatTime(timerRemaining)}</span> · événement verrouillé`;
+  document.getElementById('timerDisplay').innerHTML =
+    `<span id="timerCount">${formatTime(timerRemaining)}</span> · événement verrouillé`;
   document.getElementById('eventCountdown').textContent = formatTime(timerRemaining);
 
   const btn = document.getElementById('btnStart');
@@ -720,8 +744,7 @@ function playRevealSound() {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
-      osc.frequency.value = freq;
-      osc.type = 'sine';
+      osc.frequency.value = freq; osc.type = 'sine';
       gain.gain.setValueAtTime(0, ctx.currentTime + when);
       gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + when + 0.02);
       gain.gain.linearRampToValueAtTime(0, ctx.currentTime + when + dur);
@@ -740,7 +763,8 @@ function revealEvent() {
   card.querySelector('.lock-content').style.display = 'none';
   document.getElementById('eventTitle').style.display = 'block';
   document.getElementById('eventSub').style.display = 'block';
-  document.getElementById('timerDisplay').innerHTML = `<span id="timerCount">Événement révélé !</span>`;
+  document.getElementById('timerDisplay').innerHTML =
+    `<span id="timerCount">Événement révélé !</span>`;
 }
 
 function toggleTimer() {
@@ -762,12 +786,9 @@ function toggleTimer() {
     const pct = (timerRemaining / timerTotal) * 100;
     const bar = document.getElementById('timerBar');
     bar.style.width = pct + '%';
-
     const display = document.getElementById('timerDisplay');
-    if (pct < 20) {
-      bar.classList.add('danger');
-      display.classList.add('danger');
-    }
+
+    if (pct < 20) { bar.classList.add('danger'); display.classList.add('danger'); }
 
     if (timerRemaining > 0) {
       if (!eventRevealed) {
