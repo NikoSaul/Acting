@@ -533,7 +533,7 @@ const state = { p1i:-1, p2i:-1, o1i:-1, o2i:-1, ri:-1, c1i:-1, c2i:-1, situi:-1,
 function makeCard(type, title, sub, idx, secret, slot, actor) {
   const typeLabels = {
     perso:'Personnage', obj:'Objectif secret',
-    relation:'Relation', contrainte:'Contrainte',
+    relation:'Relation', contrainte:'Contrainte - Pas obligatoire',
     situ:'Situation', event:'Événement'
   };
   const colorClass = actor ? `card-${actor}` : `card-${type}`;
