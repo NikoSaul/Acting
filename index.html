@@ -159,6 +159,9 @@
   .solo-sec-row input:focus { border-color:var(--gold); }
   .btn-next { width:100%; background:transparent; border:1px solid #222; color:#444; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; padding:12px; cursor:pointer; border-radius:2px; transition:all 0.2s; }
   .btn-next:hover { border-color:#444; color:#888; }
+  .btn-mute { background:transparent; border:none; color:#333; font-size:16px; cursor:pointer; padding:4px; transition:color 0.2s; line-height:1; }
+  .btn-mute:hover { color:#888; }
+  .btn-mute.muted { color:var(--red); }
 </style>
 </head>
 <body>
@@ -248,6 +251,7 @@
         <div class="audio-dot"></div>
         <span id="audioLbl">audio prêt</span>
       </div>
+      <button class="btn-mute" id="btnMute" onclick="toggleMute()" title="Mute">🔊</button>
     </div>
 
     <div class="ecoute-controls">
@@ -429,9 +433,18 @@ function nextCard(){
   if(soloRunning){soloStart=performance.now();}
 }
 
+let isMuted = false;
+function toggleMute() {
+  isMuted = !isMuted;
+  const btn = document.getElementById('btnMute');
+  btn.textContent = isMuted ? '🔇' : '🔊';
+  btn.classList.toggle('muted', isMuted);
+  if (isMuted) window.speechSynthesis && window.speechSynthesis.cancel();
+}
+
 /* TTS */
 function speak(text){
-  if(!window.speechSynthesis)return;
+  if(!window.speechSynthesis || isMuted) return;
   window.speechSynthesis.cancel();
   const utt=new SpeechSynthesisUtterance(text);
   utt.lang='fr-FR';utt.rate=0.85;utt.pitch=1;
