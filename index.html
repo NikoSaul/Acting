@@ -133,7 +133,19 @@
   .band-dispute     { background:#2a1010; color:#f0a0a0; }
   .band-frustration { background:#1e1e1e; color:#666; }
   .band-heureux { background:#2a1010; color:#d0f0a0; }
-  
+
+  /* roles card */
+  .roles-card { width:100%; max-width:520px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .roles-col { border:1px solid #2a2a2a; border-radius:6px; padding:14px 16px; background:#111; }
+  .roles-col.roles-a { border-left:2px solid var(--a1); }
+  .roles-col.roles-b { border-left:2px solid var(--a2); }
+  .roles-label { font-size:9px; letter-spacing:0.25em; text-transform:uppercase; margin-bottom:10px; }
+  .roles-a .roles-label { color:var(--a1); }
+  .roles-b .roles-label { color:var(--a2); }
+  .roles-col ul { list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .roles-col li { font-size:12px; color:#bbb; font-style:italic; line-height:1.4; padding-left:12px; position:relative; }
+  .roles-col li::before { content:'•'; position:absolute; left:0; color:#444; }
+
   /* solo bar */
   .solo-bar-wrap { width:100%; max-width:520px; height:2px; background:#1e1e1e; border-radius:1px; overflow:hidden; opacity:0; transition:opacity 0.3s; }
   .solo-bar-wrap.visible { opacity:1; }
@@ -224,6 +236,17 @@
   </header>
 
   <div class="ecoute-wrapper">
+
+    <div class="roles-card" id="rolesCard">
+      <div class="roles-col roles-a">
+        <div class="roles-label">Personnage A</div>
+        <ul id="rolesAList"></ul>
+      </div>
+      <div class="roles-col roles-b">
+        <div class="roles-label">Personnage B</div>
+        <ul id="rolesBList"></ul>
+      </div>
+    </div>
 
     <div class="flip-scene" id="flipScene" onclick="flipCard()">
       <div class="flip-card" id="flipCard">
@@ -391,28 +414,52 @@ const ECOUTE=[
   {id:'culpa',label:'Culpabilité',css:'band-culpa',phrases:["Il t'attendait ce soir-là.","Tu m'as pas répondu à mon message.","Tu m'as lâché, c'est vraiment pas cool."]},
   {id:'soulage',label:'Soulagement brutal',css:'band-soulage',phrases:["C'était pas toi. On le sait maintenant.","Vous êtes innocent.","Votre fils… n'a plus de cancer."]},
   {id:'trahison',label:'Trahison',css:'band-trahison',phrases:["Elle était au courant depuis le début.","C'est pas toi le père.","Je t'ai trompé.","Je t'ai mal élevé."]},
-  {id:'tendresse',label:'Tendresse inattendue',css:'band-tendresse',phrases:["Il a parlé de toi jusqu'à la fin.","Je te l'ai jamais dit mais… je t'aime.","Elle t'a regardé toute la soirée."]},
+  {id:'tendresse',label:'Tendresse inattendue',css:'band-tendresse',phrases:["Il a parlé de toi jusqu'à la fin.","Je te l'ai jamais dit mais… je t'aime.","Elle t'a regardé toute la soirée.","Je pense à toi tous les jours.","Elle m'a dit que t'étais son héros."]},
   {id:'menace',label:'Menace froide',css:'band-menace',phrases:["On sait où habite ta mère.","Je sais qu'elle va à l'école, ta fille.","La ville est pas sûre, on sait jamais ce qui peut arriver à ta femme."]},
   {id:'honte',label:'Honte',css:'band-honte',phrases:["Tout le monde a vu la vidéo.","Tu fais rire personne.","Tu m'as tellement mis la honte devant ma famille.","J'ai vu tes posts homophobes sur Facebook."]},
-  {id:'joie',label:'Joie / bonheur',css:'band-joie',phrases:["T'as eu le rôle.","Elle a dit oui.","T'as gagné.","Ils veulent te revoir demain.","C'est une fille."]},
-  {id:'fierte',label:'Fierté / reconnaissance',css:'band-fierte',phrases:["C'est toi qu'ils ont choisi parmi tous.","Ton père a regardé le film. Il a pleuré.","Elle est fière de toi."]},
+  {id:'joie',label:'Joie / bonheur',css:'band-joie',phrases:["T'as eu le rôle.","Elle a dit oui.","T'as gagné.","Ils veulent te revoir demain.","C'est une fille.","On va être parents.","T'as réussi ton permis.","Le test est négatif.","Il s'est réveillé.","Ils ont dit oui pour l'adoption."]},
+  {id:'fierte',label:'Fierté / reconnaissance',css:'band-fierte',phrases:["C'est toi qu'ils ont choisi parmi tous.","Ton père a regardé le film. Il a pleuré.","Elle est fière de toi.","Le jury t'a choisi entre tous.","Elle a mis ta photo sur son bureau."]},
   {id:'dispute',label:'Dispute / confrontation',css:'band-dispute',phrases:["T'avais promis. T'as pas tenu.","Je te crois plus.","C'est toujours pareil avec toi.","T'es jamais là quand ça compte.","Je t'ai vu.","Arrête de mentir.","Je vais pas m'excuser."]},
   {id:'frustration',label:'Frustration froide',css:'band-frustration',phrases:["On a donné ta place à quelqu'un d'autre.","C'est trop tard.","La décision est prise."]},
-  {id:'Heureux', label:'Joie',css:'band-heureux',phrases:["Vous avez votre diplôme.","On part en vacances !","Demain c'est ferié.","On a eu notre crédit.","On est champion !!"]},
+  {id:'heureux', label:'Joie',css:'band-heureux',phrases:["Vous avez votre diplôme.","On part en vacances !","Demain c'est ferié.","On a eu notre crédit.","On est champion !!","Elle a dit oui pour le mariage.","On a gagné le procès.","T'as eu ton visa.","Le vol n'est pas annulé.","On rentre enfin à la maison."]},
 ];
 
+/* couples de rôles possibles pour Personnage A / Personnage B, par catégorie d'émotion.
+   sert à proposer un contexte relationnel qui colle au ton de la phrase tirée. */
+const ROLES = {
+  choc:        { a:["un proche qui apprend la nouvelle","un policier ou une autorité","un témoin direct"],            b:["la personne visée par la révélation","un membre de la famille","un suspect ou accusé"] },
+  culpa:       { a:["quelqu'un qui se sent responsable","un partenaire","un ami proche"],                             b:["la personne qui attendait quelque chose","un proche blessé","un collègue déçu"] },
+  soulage:     { a:["un médecin ou une autorité qui annonce","un avocat","un proche soulagé"],                        b:["la personne qui craignait le pire","un patient","un accusé innocenté"] },
+  trahison:    { a:["la personne trahie","un partenaire","un ami proche"],                                            b:["celui ou celle qui a trahi","un parent","un complice"] },
+  tendresse:   { a:["un proche qui exprime son affection","un parent","un ami de longue date"],                       b:["la personne touchée par ces mots","un enfant","un partenaire"] },
+  menace:      { a:["celui qui menace","un intermédiaire","un inconnu inquiétant"],                                   b:["la personne menacée","un proche de la cible","un témoin"] },
+  honte:       { a:["celui qui expose la situation","un proche gêné","un témoin"],                                    b:["la personne humiliée","un membre de la famille","un collègue"] },
+  joie:        { a:["celui qui annonce la bonne nouvelle","un ami proche","un membre de la famille"],                 b:["la personne qui reçoit la nouvelle","un partenaire","un collègue"] },
+  fierte:      { a:["celui qui exprime sa fierté","un parent","un mentor"],                                           b:["la personne dont on est fier","un enfant","un élève"] },
+  dispute:     { a:["l'un des deux dans le conflit","un partenaire","un ami proche"],                                 b:["l'autre partie du conflit","un collègue","un membre de la famille"] },
+  frustration: { a:["celui qui annonce la décision","un supérieur","une autorité"],                                   b:["la personne concernée par la décision","un employé","un candidat"] },
+  heureux:     { a:["celui qui partage la bonne nouvelle","un ami","un proche"],                                      b:["la personne qui reçoit la nouvelle","un partenaire","un membre de la famille"] },
+};
+
 const ALL_PHRASES=[];
-ECOUTE.forEach(cat=>cat.phrases.forEach(p=>ALL_PHRASES.push({phrase:p,label:cat.label,css:cat.css})));
+ECOUTE.forEach(cat=>cat.phrases.forEach(p=>ALL_PHRASES.push({phrase:p,label:cat.label,css:cat.css,id:cat.id})));
 
 let curIdx=-1, isFlipped=false, soloRunning=false, soloAF=null, soloStart=null;
 
 function pickRand(excl){let i;do{i=Math.floor(Math.random()*ALL_PHRASES.length);}while(ALL_PHRASES.length>1&&i===excl);return i;}
+
+function renderRoles(catId){
+  const conf=ROLES[catId]||{a:["un personnage lié à la situation"],b:["un personnage lié à la situation"]};
+  document.getElementById('rolesAList').innerHTML=conf.a.map(x=>`<li>${x}</li>`).join('');
+  document.getElementById('rolesBList').innerHTML=conf.b.map(x=>`<li>${x}</li>`).join('');
+}
 
 function applyPhrase(idx){
   const item=ALL_PHRASES[idx];
   document.getElementById('flipPhrase').textContent=item.phrase;
   document.getElementById('flipCatLabel').textContent=item.label;
   document.getElementById('flipBand').className='flip-back-band '+item.css;
+  renderRoles(item.id);
 }
 
 function flipCard(){
