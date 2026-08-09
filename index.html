@@ -199,11 +199,13 @@
 
   .btn-toggle-list { display:block; margin:24px auto 0; background:transparent; border:1px solid #2a2a2a; color:#444; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; padding:10px 24px; cursor:pointer; border-radius:2px; transition:all 0.2s; }
   .btn-toggle-list:hover { border-color:#444; color:#888; }
-  .full-list { max-width:520px; margin:20px auto 0; display:none; }
+  .full-list { max-width:560px; margin:28px auto 0; display:none; }
   .full-list.visible { display:block; animation:fadeUp 0.3s ease both; }
-  .full-list-group { margin-bottom:18px; }
-  .full-list-group h3 { font-family:'DM Serif Display',serif; font-size:14px; color:var(--gold); margin-bottom:8px; font-weight:400; }
-  .full-list-group .verbs-line { font-size:12px; color:#999; line-height:1.7; }
+  .full-list-group { margin-bottom:26px; padding-bottom:22px; border-bottom:1px solid #1e1e1e; }
+  .full-list-group:last-child { border-bottom:none; }
+  .full-list-group h3 { font-family:'DM Serif Display',serif; font-size:19px; margin-bottom:14px; font-weight:400; letter-spacing:0.01em; }
+  .verb-list-tags { display:flex; flex-wrap:wrap; gap:9px; }
+  .verb-list-tags span { font-size:13px; color:#d8d8d8; background:#161616; border:1px solid #2a2a2a; border-radius:16px; padding:7px 15px; line-height:1.2; }
 </style>
 </head>
 <body>
@@ -345,7 +347,7 @@
     <div class="verb-placeholder" id="verbPlaceholder">Choisis une émotion ci-dessus</div>
   </div>
 
-  <button class="btn-toggle-list" onclick="toggleFullList()">Voir tous les verbes</button>
+  <button class="btn-toggle-list" onclick="toggleFullList()">Voir ma liste de verbes</button>
   <div class="full-list" id="fullList"></div>
 </div>
 </div>
@@ -599,48 +601,13 @@ function runSolo(){
 /* ══ VERBES D'ACTION ══ */
 /* pools par émotion, extraits de la liste de référence de Nicolas (Judith Weston) */
 const VERBES = {
-  colere:["accuser","attaquer","défier","affronter","exiger","détruire","envahir","provoquer","rejeter","gronder","menacer","narguer","interroger","choquer"],
-  peur:["supplier","vérifier","amadouer","défendre","s'échapper","se cacher","inspecter","prétexter","sonder, fouiller","protéger","questionner","reculer","scruter","prévenir"],
-  tristesse:["consoler","réconforter","se confesser","se débarrasser","avoir de la peine","s'apitoyer","materner","pleurer quelqu'un","capituler"],
-  joie:["amuser","applaudir","féliciter","distraire","étreindre","exagérer","inviter","libérer","jubiler, triompher","sauter sur une occasion","savourer","frimer","se pavaner","accueillir"],
-  honte:["s'excuser","tricher","avouer","feindre","se moquer","mépriser","ridiculiser","mentir"],
-  desir:["admirer","adorer","charmer","câliner","attirer","flatter","exhiber","draguer","impressionner","masser","reluquer","séduire","caresser","tenter"],
+  colere:["accuser","attaquer","défier","affronter","exiger","détruire","envahir","provoquer","rejeter","gronder","menacer","narguer","interroger","choquer","contrarier","chasser","commander","décharger","renvoyer","envier","exploser","attraper","attiser","bondir sur","molester","menotter","embêter","refuser","sceller","écarteler"],
+  peur:["supplier","vérifier","amadouer","défendre","s'échapper","se cacher","inspecter","prétexter","fouiller","protéger","questionner","reculer","scruter","prévenir","droguer","agripper","tester","rechercher","secourir"],
+  tristesse:["consoler","réconforter","se confesser","se débarrasser","avoir de la peine","s'apitoyer","materner","pleurer quelqu'un","capituler","épuiser","renoncer"],
+  joie:["amuser","applaudir","féliciter","distraire","étreindre","exagérer","inviter","libérer","jubiler","triompher","savourer","frimer","se pavaner","accueillir","se prélasser","plaisanter","sauter sur une occasion","cancaner","enseigner"],
+  honte:["s'excuser","tricher","avouer","feindre","se moquer","mépriser","ridiculiser","mentir","ignorer","huer"],
+  desir:["admirer","adorer","charmer","câliner","attirer","flatter","exhiber","draguer","impressionner","masser","reluquer","séduire","caresser","tenter","se vanter","tâtonner","s'huiler","se pomponner","allumer","se refaire une beauté"],
 };
-
-/* liste complète, français + terme original anglais entre parenthèses, triée à l'affichage */
-const FULL_VERBES = [
-  ["accuser","to accuse"],["admirer","to admire"],["adorer","to adore"],["amuser","to amuse"],["contrarier","to annoy"],
-  ["s'excuser","to apologize"],["applaudir","to applaud"],["attaquer","to attack"],["se prélasser","to bask"],
-  ["demander, supplier","to beg"],["flatter, frimer","to boast"],["se vanter","to brag"],["menacer","to brood"],
-  ["chasser, renvoyer","to brush off"],["défier","to challenge"],["tromper, tricher","to cheat"],["mordiller, ronger","to chew out"],
-  ["charmer","to charm"],["vérifier","to check out"],["amadouer","to coax"],["consoler, réconforter","to comfort"],
-  ["commander, ordonner","to command"],["avouer","to confess"],["se confesser","to confide"],["affronter","to confront"],
-  ["féliciter","to congratulate"],["câliner","to cuddle"],["défendre","to defend"],["demander, exiger","to demand"],
-  ["décharger, déverser, ensevelir","to dump on"],["détruire, briser","to destroy"],["se débarrasser","to discard"],
-  ["renvoyer","to dismiss"],["distraire, divertir","to distract"],["droguer","to drug"],["épuiser","to eat up"],
-  ["étreindre, adopter une idée","to embrace"],["envier, jalouser","to envy"],["amuser, distraire","to entertain"],
-  ["attirer, appâter","to entice"],["faire éclater","to erupt"],["s'échapper, s'évader","to escape"],
-  ["faire exploser, pulvériser","to explode"],["exagérer","to exaggerate"],["feindre","to fake"],["flatter","to flatter"],
-  ["exposer, exhiber, étaler","to flaunt"],["draguer","to flirt"],["libérer, affranchir","to free"],
-  ["jubiler, exulter, pavoiser, triompher","to gloat"],["avoir de la peine","to grieve"],["attraper","to grab"],
-  ["agripper, saisir","to grasp"],["tâtonner, tripoter","to grope"],["draguer","to hit on"],["cacher, dissimuler","to hide"],
-  ["ignorer","to heal"],["impressionner","to impress"],["attiser, enflammer","to inflame"],["inspecter, contrôler","to inspect"],
-  ["interroger","to interrogate"],["envahir","to invade"],["inviter","to invite"],["huer","to jeer at"],
-  ["taquiner, plaisanter","to joke at"],["attirer, appâter","to lure"],["sauter sur (une occasion)","to leap at"],
-  ["bondir sur","to lunge at"],["masser","to massage"],["molester, lacérer","to maul"],["se moquer","to mock"],
-  ["materner","to mother"],["pleurer quelqu'un","to mourn"],["menotter","to manacle"],["reluquer","to ogle"],
-  ["s'huiler","to oil up"],["mépriser, traiter avec condescendance","to patronize"],["embêter, harceler","to pester"],
-  ["s'apitoyer, se plaindre","to pity"],["plaider, prétexter","to plead"],["bondir, sauter","to pounce"],
-  ["se refaire une beauté","to pimp"],["se pomponner","to preen"],["sonder, fouiller","to probe"],
-  ["protéger, défendre","to protect"],["provoquer","to provoke"],["poser, enraciner","to put down"],["tester","to quiz"],
-  ["questionner","to question"],["cancaner","to quack at"],["refuser","to refuse"],["rejeter","to reject"],
-  ["secourir","to rescue"],["reculer, se retirer de/dans","to retreat"],["ridiculiser","to ridicule"],["savourer","to savor"],
-  ["gronder","to scold"],["détailler, scruter","to scrutinize"],["rechercher","to search"],["séduire","to seduce"],
-  ["sceller, condamner","to seal"],["choquer","to shock"],["frimer","to show off"],["mentir","to smooth talk"],
-  ["caresser","to stroke"],["parader, se pavaner","to strut"],["capituler, se rendre","to surrender"],["narguer","to taunt"],
-  ["enseigner","to teach"],["taquiner, allumer","to tease"],["tenter","to tempt"],["analyser, interroger, tester","to test"],
-  ["menacer","to threaten"],["séparer, écarteler","to tear apart"],["prévenir","to warn"],["accueillir","to welcome"],
-];
 
 let curVerbEmotion=null, curVerbIdx=-1;
 
@@ -666,11 +633,23 @@ function showRandomVerb(){
   },150);
 }
 
+const EMOTION_META = {
+  colere:{label:"Colère",color:"var(--red)"},
+  peur:{label:"Peur",color:"var(--a2)"},
+  tristesse:{label:"Tristesse",color:"#7891a8"},
+  joie:{label:"Joie",color:"var(--gold)"},
+  honte:{label:"Honte",color:"#c99a5c"},
+  desir:{label:"Désir",color:"var(--a1)"},
+};
+
 function toggleFullList(){
   const el=document.getElementById('fullList');
   if(el.classList.contains('visible')){el.classList.remove('visible');return;}
-  const sorted=[...FULL_VERBES].sort((a,b)=>a[0].localeCompare(b[0],'fr'));
-  el.innerHTML=`<div class="full-list-group"><h3>Liste complète, ${sorted.length} verbes</h3><div class="verbs-line">${sorted.map(([fr,en])=>`${fr} (${en})`).join(' · ')}</div></div>`;
+  el.innerHTML=Object.keys(VERBES).map(id=>{
+    const meta=EMOTION_META[id];
+    const verbs=[...VERBES[id]].sort((a,b)=>a.localeCompare(b,'fr'));
+    return `<div class="full-list-group"><h3 style="color:${meta.color}">${meta.label}</h3><div class="verb-list-tags">${verbs.map(v=>`<span>${v}</span>`).join('')}</div></div>`;
+  }).join('');
   el.classList.add('visible');
 }
 </script>
