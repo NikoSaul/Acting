@@ -175,6 +175,35 @@
   .btn-mute { background:transparent; border:none; color:#333; font-size:16px; cursor:pointer; padding:4px; transition:color 0.2s; line-height:1; }
   .btn-mute:hover { color:#888; }
   .btn-mute.muted { color:var(--red); }
+
+  /* ═══════════════════════════════
+     VERBES D'ACTION
+  ═══════════════════════════════ */
+  .verb-chips { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:520px; margin:0 auto 28px; }
+  .verb-chip { background:transparent; border:1px solid #333; color:#888; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; padding:10px 18px; border-radius:20px; cursor:pointer; transition:all 0.2s; }
+  .verb-chip:hover { border-color:#555; color:#ccc; }
+  .verb-chip.active.chip-colere { background:var(--red); border-color:var(--red); color:#f5d0cc; }
+  .verb-chip.active.chip-peur { background:var(--a2); border-color:var(--a2); color:var(--a2-text); }
+  .verb-chip.active.chip-tristesse { background:#3d4550; border-color:#3d4550; color:#c8d2dc; }
+  .verb-chip.active.chip-joie { background:var(--gold); border-color:var(--gold); color:var(--ink); }
+  .verb-chip.active.chip-honte { background:#7a5c2e; border-color:#7a5c2e; color:#f0e0c0; }
+  .verb-chip.active.chip-desir { background:var(--a1); border-color:var(--a1); color:var(--a1-text); }
+
+  .verb-reveal { width:100%; max-width:520px; margin:0 auto; min-height:140px; border:1px solid #2a2a2a; border-radius:8px; background:#0f0f0f; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:30px; opacity:0; transform:scale(0.97); transition:opacity 0.25s, transform 0.25s; }
+  .verb-reveal.visible { opacity:1; transform:scale(1); }
+  .verb-reveal .verb-emotion-tag { font-size:9px; letter-spacing:0.25em; text-transform:uppercase; color:#555; }
+  .verb-reveal .verb-word { font-family:'DM Serif Display',serif; font-size:clamp(28px,5vw,40px); color:var(--paper); text-align:center; }
+  .verb-reveal .btn-reroll-verb { background:transparent; border:1px solid #333; color:#888; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; padding:8px 20px; cursor:pointer; border-radius:2px; transition:all 0.2s; }
+  .verb-reveal .btn-reroll-verb:hover { border-color:var(--gold); color:var(--gold); }
+  .verb-reveal .verb-placeholder { color:#444; font-size:12px; letter-spacing:0.1em; }
+
+  .btn-toggle-list { display:block; margin:24px auto 0; background:transparent; border:1px solid #2a2a2a; color:#444; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; padding:10px 24px; cursor:pointer; border-radius:2px; transition:all 0.2s; }
+  .btn-toggle-list:hover { border-color:#444; color:#888; }
+  .full-list { max-width:520px; margin:20px auto 0; display:none; }
+  .full-list.visible { display:block; animation:fadeUp 0.3s ease both; }
+  .full-list-group { margin-bottom:18px; }
+  .full-list-group h3 { font-family:'DM Serif Display',serif; font-size:14px; color:var(--gold); margin-bottom:8px; font-weight:400; }
+  .full-list-group .verbs-line { font-size:12px; color:#999; line-height:1.7; }
 </style>
 </head>
 <body>
@@ -182,6 +211,7 @@
 <div class="tabs-bar">
   <button class="tab-btn active" onclick="switchTab('impro',this)">Jeux d'impro</button>
   <button class="tab-btn"        onclick="switchTab('ecoute',this)">À l'écoute</button>
+  <button class="tab-btn"        onclick="switchTab('verbes',this)">Verbes d'action</button>
   <a class="tabs-credit" href="https://instagram.com/nikoballz" target="_blank">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     <span>Questions / retours @nikoballz</span>
@@ -291,6 +321,32 @@
     </div>
 
   </div>
+</div>
+</div>
+
+<!-- ══ TAB 3 : VERBES D'ACTION ══ -->
+<div class="tab-pane" id="tab-verbes">
+<div class="app">
+  <header>
+    <h1>Verbes d'action</h1>
+    <p>Choisir un verbe qui joue l'émotion</p>
+  </header>
+
+  <div class="verb-chips" id="verbChips">
+    <button class="verb-chip chip-colere" data-emotion="colere" onclick="pickVerbEmotion('colere',this)">Colère</button>
+    <button class="verb-chip chip-peur" data-emotion="peur" onclick="pickVerbEmotion('peur',this)">Peur</button>
+    <button class="verb-chip chip-tristesse" data-emotion="tristesse" onclick="pickVerbEmotion('tristesse',this)">Tristesse</button>
+    <button class="verb-chip chip-joie" data-emotion="joie" onclick="pickVerbEmotion('joie',this)">Joie</button>
+    <button class="verb-chip chip-honte" data-emotion="honte" onclick="pickVerbEmotion('honte',this)">Honte</button>
+    <button class="verb-chip chip-desir" data-emotion="desir" onclick="pickVerbEmotion('desir',this)">Désir</button>
+  </div>
+
+  <div class="verb-reveal" id="verbReveal">
+    <div class="verb-placeholder" id="verbPlaceholder">Choisis une émotion ci-dessus</div>
+  </div>
+
+  <button class="btn-toggle-list" onclick="toggleFullList()">Voir tous les verbes</button>
+  <div class="full-list" id="fullList"></div>
 </div>
 </div>
 
@@ -538,6 +594,84 @@ function runSolo(){
     soloAF=requestAnimationFrame(tick);
   }
   soloAF=requestAnimationFrame(tick);
+}
+
+/* ══ VERBES D'ACTION ══ */
+/* pools par émotion, extraits de la liste de référence de Nicolas (Judith Weston) */
+const VERBES = {
+  colere:["accuser","attaquer","défier","affronter","exiger","détruire","envahir","provoquer","rejeter","gronder","menacer","narguer","interroger","choquer"],
+  peur:["supplier","vérifier","amadouer","défendre","s'échapper","se cacher","inspecter","prétexter","sonder, fouiller","protéger","questionner","reculer","scruter","prévenir"],
+  tristesse:["consoler","réconforter","se confesser","se débarrasser","avoir de la peine","s'apitoyer","materner","pleurer quelqu'un","capituler"],
+  joie:["amuser","applaudir","féliciter","distraire","étreindre","exagérer","inviter","libérer","jubiler, triompher","sauter sur une occasion","savourer","frimer","se pavaner","accueillir"],
+  honte:["s'excuser","tricher","avouer","feindre","se moquer","mépriser","ridiculiser","mentir"],
+  desir:["admirer","adorer","charmer","câliner","attirer","flatter","exhiber","draguer","impressionner","masser","reluquer","séduire","caresser","tenter"],
+};
+
+/* liste complète, français + terme original anglais entre parenthèses, triée à l'affichage */
+const FULL_VERBES = [
+  ["accuser","to accuse"],["admirer","to admire"],["adorer","to adore"],["amuser","to amuse"],["contrarier","to annoy"],
+  ["s'excuser","to apologize"],["applaudir","to applaud"],["attaquer","to attack"],["se prélasser","to bask"],
+  ["demander, supplier","to beg"],["flatter, frimer","to boast"],["se vanter","to brag"],["menacer","to brood"],
+  ["chasser, renvoyer","to brush off"],["défier","to challenge"],["tromper, tricher","to cheat"],["mordiller, ronger","to chew out"],
+  ["charmer","to charm"],["vérifier","to check out"],["amadouer","to coax"],["consoler, réconforter","to comfort"],
+  ["commander, ordonner","to command"],["avouer","to confess"],["se confesser","to confide"],["affronter","to confront"],
+  ["féliciter","to congratulate"],["câliner","to cuddle"],["défendre","to defend"],["demander, exiger","to demand"],
+  ["décharger, déverser, ensevelir","to dump on"],["détruire, briser","to destroy"],["se débarrasser","to discard"],
+  ["renvoyer","to dismiss"],["distraire, divertir","to distract"],["droguer","to drug"],["épuiser","to eat up"],
+  ["étreindre, adopter une idée","to embrace"],["envier, jalouser","to envy"],["amuser, distraire","to entertain"],
+  ["attirer, appâter","to entice"],["faire éclater","to erupt"],["s'échapper, s'évader","to escape"],
+  ["faire exploser, pulvériser","to explode"],["exagérer","to exaggerate"],["feindre","to fake"],["flatter","to flatter"],
+  ["exposer, exhiber, étaler","to flaunt"],["draguer","to flirt"],["libérer, affranchir","to free"],
+  ["jubiler, exulter, pavoiser, triompher","to gloat"],["avoir de la peine","to grieve"],["attraper","to grab"],
+  ["agripper, saisir","to grasp"],["tâtonner, tripoter","to grope"],["draguer","to hit on"],["cacher, dissimuler","to hide"],
+  ["ignorer","to heal"],["impressionner","to impress"],["attiser, enflammer","to inflame"],["inspecter, contrôler","to inspect"],
+  ["interroger","to interrogate"],["envahir","to invade"],["inviter","to invite"],["huer","to jeer at"],
+  ["taquiner, plaisanter","to joke at"],["attirer, appâter","to lure"],["sauter sur (une occasion)","to leap at"],
+  ["bondir sur","to lunge at"],["masser","to massage"],["molester, lacérer","to maul"],["se moquer","to mock"],
+  ["materner","to mother"],["pleurer quelqu'un","to mourn"],["menotter","to manacle"],["reluquer","to ogle"],
+  ["s'huiler","to oil up"],["mépriser, traiter avec condescendance","to patronize"],["embêter, harceler","to pester"],
+  ["s'apitoyer, se plaindre","to pity"],["plaider, prétexter","to plead"],["bondir, sauter","to pounce"],
+  ["se refaire une beauté","to pimp"],["se pomponner","to preen"],["sonder, fouiller","to probe"],
+  ["protéger, défendre","to protect"],["provoquer","to provoke"],["poser, enraciner","to put down"],["tester","to quiz"],
+  ["questionner","to question"],["cancaner","to quack at"],["refuser","to refuse"],["rejeter","to reject"],
+  ["secourir","to rescue"],["reculer, se retirer de/dans","to retreat"],["ridiculiser","to ridicule"],["savourer","to savor"],
+  ["gronder","to scold"],["détailler, scruter","to scrutinize"],["rechercher","to search"],["séduire","to seduce"],
+  ["sceller, condamner","to seal"],["choquer","to shock"],["frimer","to show off"],["mentir","to smooth talk"],
+  ["caresser","to stroke"],["parader, se pavaner","to strut"],["capituler, se rendre","to surrender"],["narguer","to taunt"],
+  ["enseigner","to teach"],["taquiner, allumer","to tease"],["tenter","to tempt"],["analyser, interroger, tester","to test"],
+  ["menacer","to threaten"],["séparer, écarteler","to tear apart"],["prévenir","to warn"],["accueillir","to welcome"],
+];
+
+let curVerbEmotion=null, curVerbIdx=-1;
+
+function pickVerbEmotion(emotion, btn){
+  document.querySelectorAll('.verb-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  curVerbEmotion=emotion;
+  curVerbIdx=-1;
+  showRandomVerb();
+}
+
+function showRandomVerb(){
+  if(!curVerbEmotion)return;
+  const pool=VERBES[curVerbEmotion];
+  let i;
+  do{i=Math.floor(Math.random()*pool.length);}while(pool.length>1 && i===curVerbIdx);
+  curVerbIdx=i;
+  const reveal=document.getElementById('verbReveal');
+  reveal.classList.remove('visible');
+  setTimeout(()=>{
+    reveal.innerHTML=`<div class="verb-emotion-tag">${curVerbEmotion}</div><div class="verb-word">${pool[i]}</div><button class="btn-reroll-verb" onclick="showRandomVerb()">↺ Autre verbe</button>`;
+    reveal.classList.add('visible');
+  },150);
+}
+
+function toggleFullList(){
+  const el=document.getElementById('fullList');
+  if(el.classList.contains('visible')){el.classList.remove('visible');return;}
+  const sorted=[...FULL_VERBES].sort((a,b)=>a[0].localeCompare(b[0],'fr'));
+  el.innerHTML=`<div class="full-list-group"><h3>Liste complète, ${sorted.length} verbes</h3><div class="verbs-line">${sorted.map(([fr,en])=>`${fr} (${en})`).join(' · ')}</div></div>`;
+  el.classList.add('visible');
 }
 </script>
 </body>
