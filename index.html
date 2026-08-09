@@ -206,6 +206,7 @@
   .full-list-group h3 { font-family:'DM Serif Display',serif; font-size:19px; margin-bottom:14px; font-weight:400; letter-spacing:0.01em; }
   .verb-list-tags { display:flex; flex-wrap:wrap; gap:9px; }
   .verb-list-tags span { font-size:13px; color:#d8d8d8; background:#161616; border:1px solid #2a2a2a; border-radius:16px; padding:7px 15px; line-height:1.2; }
+  .verb-list-tags span.simple { background:#161616; font-weight:600; }
 </style>
 </head>
 <body>
@@ -642,13 +643,20 @@ const EMOTION_META = {
   desir:{label:"Désir",color:"var(--a1)"},
 };
 
+/* phrases composées (verbe + complément) qu'on ne met pas en avant, contrairement aux verbes simples */
+const COMPOUND_VERBS = new Set(["bondir sur","avoir de la peine","pleurer quelqu'un","sauter sur une occasion","se refaire une beauté"]);
+
 function toggleFullList(){
   const el=document.getElementById('fullList');
   if(el.classList.contains('visible')){el.classList.remove('visible');return;}
   el.innerHTML=Object.keys(VERBES).map(id=>{
     const meta=EMOTION_META[id];
     const verbs=[...VERBES[id]].sort((a,b)=>a.localeCompare(b,'fr'));
-    return `<div class="full-list-group"><h3 style="color:${meta.color}">${meta.label}</h3><div class="verb-list-tags">${verbs.map(v=>`<span>${v}</span>`).join('')}</div></div>`;
+    const tags=verbs.map(v=>{
+      if(COMPOUND_VERBS.has(v)) return `<span>${v}</span>`;
+      return `<span class="simple" style="color:${meta.color};border-color:${meta.color}">${v}</span>`;
+    }).join('');
+    return `<div class="full-list-group"><h3 style="color:${meta.color}">${meta.label}</h3><div class="verb-list-tags">${tags}</div></div>`;
   }).join('');
   el.classList.add('visible');
 }
